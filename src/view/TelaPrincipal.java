@@ -6,7 +6,7 @@ package view;
 
 /**
  *
- * @author murilocost4
+ * @author mariana
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
@@ -16,6 +16,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public TelaPrincipal() {
         initComponents();
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
