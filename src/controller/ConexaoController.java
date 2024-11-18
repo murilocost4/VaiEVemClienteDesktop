@@ -7,6 +7,7 @@ package controller;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import modelDominio.Condutor;
 import modelDominio.Usuario;
 import modelDominio.Viagem;
 
@@ -53,6 +54,18 @@ public class ConexaoController {
             return null;
         }
     } 
+    
+    public ArrayList<Condutor> getCondutorLista(){
+        try {
+            // enviar o comando "ViagemLista"
+            out.writeObject("CondutorLista");
+            // recebendo listagem de Viagens
+            return (ArrayList<Condutor>) in.readObject(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
     
     // método que comunica com o Servidor e envia o
@@ -122,7 +135,7 @@ public class ConexaoController {
         }
     }
     
-    public ArrayList<Usuario> usuarioLista(){
+    public ArrayList<Usuario> getUsuarioLista(){
         String msg;
         try{
             out.writeObject("UsuarioLista");
@@ -134,6 +147,58 @@ public class ConexaoController {
             return null;
         }
     }
+    
+    public boolean usuarioInserir(Usuario usr){
+        try {
+            // enviando comando
+            out.writeObject("ViagemInserir");
+            in.readObject();//lendo o "ok"
+            // enviando o Usuario
+            out.writeObject(usr);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean usuarioAlterar(Usuario usr){
+        try {
+            // enviando comando
+            out.writeObject("UsuarioAlterar");
+            in.readObject();//lendo o "ok"
+            // enviando o Usuario
+            out.writeObject(usr);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean usuarioExcluir(Usuario usr){
+        try {
+            // enviando comando
+            out.writeObject("UsuarioExcluir");
+            in.readObject();//lendo o "ok"
+            // enviando o Usuario
+            out.writeObject(usr);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
      //=========================== FIM ==================
      public void fim(){
          String msg;

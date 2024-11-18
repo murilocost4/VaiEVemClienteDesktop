@@ -28,21 +28,60 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jBViagens = new javax.swing.JButton();
+        jBUsuarios = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jBViagens.setText("Viagens");
+        jBViagens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBViagensActionPerformed(evt);
+            }
+        });
+
+        jBUsuarios.setText("Usuários");
+        jBUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBUsuariosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBUsuarios)
+                    .addComponent(jBViagens))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jBViagens)
+                .addGap(26, 26, 26)
+                .addComponent(jBUsuarios)
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBViagensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBViagensActionPerformed
+        this.dispose();
+        TelaViagens telViagens = new TelaViagens();
+        telViagens.setVisible(true);
+    }//GEN-LAST:event_jBViagensActionPerformed
+
+    private void jBUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBUsuariosActionPerformed
+        this.dispose();
+        TelaUsuarios telUsuarios = new TelaUsuarios();
+        telUsuarios.setVisible(true);
+    }//GEN-LAST:event_jBUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -80,5 +119,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBUsuarios;
+    private javax.swing.JButton jBViagens;
     // End of variables declaration//GEN-END:variables
 }
