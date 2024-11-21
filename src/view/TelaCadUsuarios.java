@@ -28,6 +28,19 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
     public void setUsuario (Usuario usr) {
         codigo = usr.getCodUsuario();
         jTFNome.setText(usr.getNomeUsuario());
+        jTFCpf.setText(usr.getCpf());
+        jTFEmail.setText(usr.getEmail());
+        jTFEndereco.setText(usr.getEndereco());
+        jTFFone.setText(usr.getFone());
+        jTFNascimento.setText(usr.getNascimento());
+        jPFSenha.setText(usr.getSenha());
+        if (usr instanceof Admin) {
+            jCBTipo.setSelectedIndex(1);
+        } else if (usr instanceof Condutor) {
+            jCBTipo.setSelectedIndex(2);
+        } else if (usr instanceof Passageiro) {
+            jCBTipo.setSelectedIndex(3);
+        }
         
     }
 
@@ -49,6 +62,8 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
         jPFSenha = new javax.swing.JPasswordField();
         jBSalvar = new javax.swing.JButton();
         jCBTipo = new javax.swing.JComboBox<>();
+        jBVoltar = new javax.swing.JButton();
+        jBCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,27 +90,45 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
 
         jCBTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<<Selecionar>>", "Admin", "Condutor", "Passageiro" }));
 
+        jBVoltar.setText("Voltar");
+        jBVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBVoltarActionPerformed(evt);
+            }
+        });
+
+        jBCancelar.setText("Cancelar");
+        jBCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBSalvar)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTFNascimento))
-                        .addComponent(jTFEmail)
-                        .addComponent(jPFSenha)
-                        .addComponent(jTFEndereco)
-                        .addComponent(jTFFone)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jBVoltar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBSalvar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFNascimento))
+                    .addComponent(jTFEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPFSenha, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTFEndereco, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTFFone, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -118,107 +151,113 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addComponent(jTFFone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jBSalvar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBSalvar)
+                    .addComponent(jBVoltar)
+                    .addComponent(jBCancelar))
                 .addContainerGap(91, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
-        if (jTFNome.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Nome");
-        } else if (jCBTipo.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Tipo");
-        } else if (jTFEmail.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Email");
-        } else if (jPFSenha.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Senha");
-        } else if (jTFCpf.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo CPF");
-        } else if (jTFNascimento.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Nascimento");
-        } else if (jTFEndereco.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Endereco");
-        } else if (jTFFone.equals("")) {
-            JOptionPane.showMessageDialog(this, "Preencha o campo Fone");
-        } else {
-                        
-            if (jCBTipo.getSelectedIndex() == 1) {
-                Admin usr = new Admin(jTFNome.getText(), jTFCpf.getText(), jTFNascimento.getText(), jTFEndereco.getText(), jPFSenha.getText(), jTFEmail.getText(), jTFFone.getText());
-                Boolean ok = Principal.ccont.usuarioInserir(usr);
-                if (!ok) {
-                    JOptionPane.showMessageDialog(this,
-                        "Ocorreu um  erro",
-                        this.getTitle(),
-                        JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                        "Usuario inserido com sucesso",
-                        this.getTitle(),
-                        JOptionPane.INFORMATION_MESSAGE);
-                    jTFNome.requestFocus();
-                    jTFNome.setText("");
-                    jTFEmail.setText("");
-                    jTFCpf.setText("");
-                    jTFNascimento.setText("");
-                    jTFEndereco.setText("");
-                    jTFFone.setText("");
-                    jPFSenha.setText("");
-                    jCBTipo.setSelectedIndex(0);
-                }
-            } else if (jCBTipo.getSelectedIndex() == 2) {
-                Condutor usr = new Condutor(jTFNome.getText(), jTFCpf.getText(), jTFNascimento.getText(), jTFEndereco.getText(), jPFSenha.getText(), jTFEmail.getText(), jTFFone.getText());
-                Boolean ok = Principal.ccont.usuarioInserir(usr);
-                if (!ok) {
-                    JOptionPane.showMessageDialog(this,
-                        "Ocorreu um  erro",
-                        this.getTitle(),
-                        JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                        "Usuario inserido com sucesso",
-                        this.getTitle(),
-                        JOptionPane.INFORMATION_MESSAGE);
-                    jTFNome.requestFocus();
-                    jTFNome.setText("");
-                    jTFEmail.setText("");
-                    jTFCpf.setText("");
-                    jTFNascimento.setText("");
-                    jTFEndereco.setText("");
-                    jTFFone.setText("");
-                    jPFSenha.setText("");
-                    jCBTipo.setSelectedIndex(0);
-                }
-            } else if (jCBTipo.getSelectedIndex() == 3) {
-                Passageiro usr = new Passageiro(jTFNome.getText(), jTFCpf.getText(), jTFNascimento.getText(), jTFEndereco.getText(), jPFSenha.getText(), jTFEmail.getText(), jTFFone.getText());
-                Boolean ok = Principal.ccont.usuarioInserir(usr);
-                if (!ok) {
-                    JOptionPane.showMessageDialog(this,
-                        "Ocorreu um  erro",
-                        this.getTitle(),
-                        JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                        "Usuario inserido com sucesso",
-                        this.getTitle(),
-                        JOptionPane.INFORMATION_MESSAGE);
-                    jTFNome.requestFocus();
-                    jTFNome.setText("");
-                    jTFEmail.setText("");
-                    jTFCpf.setText("");
-                    jTFNascimento.setText("");
-                    jTFEndereco.setText("");
-                    jTFFone.setText("");
-                    jPFSenha.setText("");
-                    jCBTipo.setSelectedIndex(0);
-                }
-            }
-            
-            
+        // Validação de campos
+    if (jTFNome.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Nome");
+        return;
+    }
+    if (jCBTipo.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this, "Selecione um tipo válido");
+        return;
+    }
+    if (jTFEmail.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Email");
+        return;
+    }
+    if (new String(jPFSenha.getPassword()).trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Senha");
+        return;
+    }
+    if (jTFCpf.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo CPF");
+        return;
+    }
+    if (jTFNascimento.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Nascimento");
+        return;
+    }
+    if (jTFEndereco.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Endereço");
+        return;
+    }
+    if (jTFFone.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o campo Telefone");
+        return;
+    }
+    
+    boolean ok;
+    
+    // Criação do usuário com base no tipo
+    Usuario usr;
+    String nome = jTFNome.getText().trim();
+    String cpf = jTFCpf.getText().trim();
+    String nascimento = jTFNascimento.getText().trim();
+    String endereco = jTFEndereco.getText().trim();
+    String senha = new String(jPFSenha.getPassword()).trim();
+    String email = jTFEmail.getText().trim();
+    String fone = jTFFone.getText().trim();
+
+    switch (jCBTipo.getSelectedIndex()) {
+        case 1 -> usr = new Admin(nome, cpf, nascimento, endereco, senha, email, fone);
+        case 2 -> usr = new Condutor(nome, cpf, nascimento, endereco, senha, email, fone);
+        case 3 -> usr = new Passageiro(nome, cpf, nascimento, endereco, senha, email, fone);
+        default -> {
+            JOptionPane.showMessageDialog(this, "Tipo de usuário inválido");
+            return;
         }
+    }
+
+    if (codigo == -1) {
+        ok = Principal.ccont.usuarioInserir(usr);
+    } else {
+        usr.setCodUsuario(codigo);
+        ok = Principal.ccont.usuarioAlterar(usr);
+    }
+    // Inserção no sistema
+    
+    if (!ok) {
+        JOptionPane.showMessageDialog(this, "Ocorreu um erro ao salvar o usuário", this.getTitle(), JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    JOptionPane.showMessageDialog(this, "Usuário inserido com sucesso", this.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+
+    // Limpeza do formulário
+    limparFormulario();
+    this.dispose();
     }//GEN-LAST:event_jBSalvarActionPerformed
 
+    private void jBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCancelarActionPerformed
+        limparFormulario();
+    }//GEN-LAST:event_jBCancelarActionPerformed
+
+    private void jBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVoltarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBVoltarActionPerformed
+
+    private void limparFormulario() {
+    jTFNome.setText("");
+    jTFEmail.setText("");
+    jTFCpf.setText("");
+    jTFNascimento.setText("");
+    jTFEndereco.setText("");
+    jTFFone.setText("");
+    jPFSenha.setText("");
+    jCBTipo.setSelectedIndex(0);
+    jTFNome.requestFocus();
+}
     /**
      * @param args the command line arguments
      */
@@ -255,7 +294,9 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBCancelar;
     private javax.swing.JButton jBSalvar;
+    private javax.swing.JButton jBVoltar;
     private javax.swing.JComboBox<String> jCBTipo;
     private javax.swing.JPasswordField jPFSenha;
     private javax.swing.JTextField jTFCpf;

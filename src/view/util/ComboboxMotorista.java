@@ -54,7 +54,7 @@ public class ComboboxMotorista {
     // selCodigo --> parâmetro para já selecionar um código 
     // combo     --> ComboBox a ser preenchida
     // lista     --> Lista de Raças
-    public static void preencheComboBoxMotorista(int SelCodigo, JComboBox combo, ArrayList<Condutor> lista, Boolean addTodos){
+    public static void preencheComboBoxMotorista(int SelCodigo, JComboBox combo, ArrayList<Condutor> lista){
         Vector vlista= new Vector();
         int x = 0;  // se quiser inserir um vazio então tem que jogar esse número para 1
         int selecionarCodigo = -1; // guarda a posicao se tiver código selecionado
@@ -62,8 +62,8 @@ public class ComboboxMotorista {
         /* inserindo vazio*/
         // só habilite a linha abaixo se você quiser uma Marca vazia, exemplo:
         // cadastrar sem Marca.
-        if (addTodos)
-            vlista.add(new ComboboxMotorista(0,"Sem Condutor"));
+        
+        vlista.add(new ComboboxMotorista(0,"Sem Condutor"));
             
         // percorre toda a lista de Raças e armazena as informações no Vector vlista;
         for (Condutor c: lista){ 

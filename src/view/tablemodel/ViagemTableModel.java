@@ -41,12 +41,21 @@ public class ViagemTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Viagem v = listaViagens.get(rowIndex);
+        String status;
+        
+        if (v.getStatus_viagem() == 0) {
+            status = "Não Iniciado";
+        } else if (v.getStatus_viagem() == 1) {
+            status = "Em Andamento";
+        } else {
+            status = "Finalizado";
+        }
 
         switch (columnIndex) {
             case 0:  return v.getOrigem();
             case 1:  return v.getDestino();
-            case 2:  return new SimpleDateFormat("dd/MM/yyyy").format(v.getData());
-            case 3:  return v.getStatus_viagem();
+            case 2:  return v.getData();
+            case 3:  return status;
             default: return "";
         }
     }

@@ -23,7 +23,7 @@ public class UsuarioTableModel extends AbstractTableModel {
     private ArrayList<Usuario> listaUsuarios;
 
     // método construtor que recebe como parâmetro a lista de Bikes
-    public UsuarioTableModel(ArrayList<Usuario> listaUsuario) {
+    public UsuarioTableModel(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
     }
 
@@ -36,27 +36,26 @@ public class UsuarioTableModel extends AbstractTableModel {
     // sobrescrita do método que diz quantas COLUNAS a tabela tem
     @Override
     public int getColumnCount() {
-        return 1;
+        return 2;
     }
 
     // sobrescrita do método que retorna o valor de cada coluna
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Usuario usr = listaUsuarios.get(rowIndex);
-        
-        String funcao;
+        String tipo;
         
         if (usr instanceof Admin) {
-            funcao = "Administrador";
+            tipo = "Admin";
         } else if (usr instanceof Condutor) {
-            funcao = "Motorista";
+            tipo = "Condutor";
         } else {
-            funcao = "Passageiro";
+            tipo = "Passageiro";
         }
 
         switch (columnIndex) {
             case 0:  return usr.getNomeUsuario();
-            case 1:  return funcao;
+            case 1:  return tipo;
             default: return "";
         }
     }
@@ -66,7 +65,7 @@ public class UsuarioTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         switch (column) {
             case 0:  return "Nome";
-            case 1:  return "Função";
+            case 1:  return "Tipo";
             default: return "NoName";
         }
     }

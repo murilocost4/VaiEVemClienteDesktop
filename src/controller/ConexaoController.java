@@ -151,7 +151,7 @@ public class ConexaoController {
     public boolean usuarioInserir(Usuario usr){
         try {
             // enviando comando
-            out.writeObject("ViagemInserir");
+            out.writeObject("UsuarioInserir");
             in.readObject();//lendo o "ok"
             // enviando o Usuario
             out.writeObject(usr);

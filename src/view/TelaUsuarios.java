@@ -5,9 +5,9 @@
 package view;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelDominio.Usuario;
 import view.tablemodel.UsuarioTableModel;
-import view.tablemodel.ViagemTableModel;
 
 /**
  *
@@ -46,8 +46,11 @@ public class TelaUsuarios extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTUsuarios = new javax.swing.JTable();
+        jBExcluir1 = new javax.swing.JButton();
+        jBAdicionar1 = new javax.swing.JButton();
+        jBAtualiza = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jBVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,40 +65,152 @@ public class TelaUsuarios extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTUsuarios.setRowHeight(26);
+        jTUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTUsuarios);
 
-        jLabel1.setText("Usuarios");
+        jBExcluir1.setBackground(new java.awt.Color(57, 141, 98));
+        jBExcluir1.setForeground(new java.awt.Color(255, 255, 255));
+        jBExcluir1.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/trash.png")); // NOI18N
+        jBExcluir1.setText("Excluir");
+        jBExcluir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExcluir1ActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("jButton1");
+        jBAdicionar1.setBackground(new java.awt.Color(57, 141, 98));
+        jBAdicionar1.setForeground(new java.awt.Color(255, 255, 255));
+        jBAdicionar1.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/plus.png")); // NOI18N
+        jBAdicionar1.setText("Adicionar");
+        jBAdicionar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAdicionar1ActionPerformed(evt);
+            }
+        });
+
+        jBAtualiza.setBackground(new java.awt.Color(57, 141, 98));
+        jBAtualiza.setForeground(new java.awt.Color(255, 255, 255));
+        jBAtualiza.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/rotate-right.png")); // NOI18N
+        jBAtualiza.setText("Atualizar");
+        jBAtualiza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAtualizaActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(57, 141, 98));
+        jLabel1.setText("Usuários");
+
+        jBVoltar.setBackground(new java.awt.Color(57, 141, 98));
+        jBVoltar.setForeground(new java.awt.Color(255, 255, 255));
+        jBVoltar.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/arrow-left.png")); // NOI18N
+        jBVoltar.setText("Voltar");
+        jBVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBVoltarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBAdicionar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBExcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBVoltar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                        .addComponent(jBAtualiza)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBAtualiza, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jBAdicionar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBExcluir1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTUsuariosMouseClicked
+        if (evt.getClickCount() == 2){
+            // quando for duplo clique eu quero mostrar a marca clicada
+            Usuario usr = usuarioModel.getUsuario(jTUsuarios.getSelectedRow());
+            //por enquanto mostrar a Marca num JOptionPane
+            // depois teremos que abrir a tela de cadastro para editar o nome
+            //JOptionPane.showMessageDialog(rootPane, m);
+            TelaCadUsuarios cadUsuarios = new TelaCadUsuarios();
+            // configurando para abrir a tela somente 1 unica vez
+            // passando a marca para dentro da tela de cadastro
+            cadUsuarios.setUsuario(usr);
+            cadUsuarios.setVisible(true);
+            atualizaTabela();
+        }
+    }//GEN-LAST:event_jTUsuariosMouseClicked
+
+    private void jBExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluir1ActionPerformed
+        if (jTUsuarios.getSelectedRow() >= 0) {
+            if (JOptionPane.showConfirmDialog(this,
+                "Tem certeza de que deseja excluir?",
+                this.getTitle(),
+                JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION) {
+
+            Usuario usr = usuarioModel.getUsuario(jTUsuarios.getSelectedRow());
+            if (usr != null) {
+                Principal.ccont.usuarioExcluir(usr);
+                atualizaTabela();
+            }
+        }
+        }
+    }//GEN-LAST:event_jBExcluir1ActionPerformed
+
+    private void jBAdicionar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionar1ActionPerformed
+        TelaCadUsuarios cadUsuarios = new TelaCadUsuarios();
+        // configurando para abrir a tela somente 1 unica vez
+        cadUsuarios.setVisible(true);
+        atualizaTabela();
+    }//GEN-LAST:event_jBAdicionar1ActionPerformed
+
+    private void jBAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtualizaActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_jBAtualizaActionPerformed
+
+    private void jBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVoltarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBVoltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,7 +248,10 @@ public class TelaUsuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jBAdicionar1;
+    private javax.swing.JButton jBAtualiza;
+    private javax.swing.JButton jBExcluir1;
+    private javax.swing.JButton jBVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTUsuarios;

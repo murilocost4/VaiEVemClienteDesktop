@@ -30,55 +30,68 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jBViagens = new javax.swing.JButton();
         jBUsuarios = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jBViagens.setBackground(new java.awt.Color(57, 141, 98));
+        jBViagens.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jBViagens.setForeground(new java.awt.Color(255, 255, 255));
         jBViagens.setText("Viagens");
+        jBViagens.setBorderPainted(false);
         jBViagens.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBViagensActionPerformed(evt);
             }
         });
 
+        jBUsuarios.setBackground(new java.awt.Color(57, 141, 98));
+        jBUsuarios.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jBUsuarios.setForeground(new java.awt.Color(255, 255, 255));
         jBUsuarios.setText("Usuários");
+        jBUsuarios.setBorderPainted(false);
         jBUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBUsuariosActionPerformed(evt);
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/VAI E VEM (2) 1.png")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(158, 158, 158)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBUsuarios)
-                    .addComponent(jBViagens))
-                .addContainerGap(154, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(107, 107, 107)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBViagens, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(107, 107, 107))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(jBViagens)
-                .addGap(26, 26, 26)
-                .addComponent(jBUsuarios)
-                .addContainerGap(149, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(72, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(40, 40, 40)
+                .addComponent(jBViagens, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jBUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBViagensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBViagensActionPerformed
-        this.dispose();
         TelaViagens telViagens = new TelaViagens();
         telViagens.setVisible(true);
     }//GEN-LAST:event_jBViagensActionPerformed
 
     private void jBUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBUsuariosActionPerformed
-        this.dispose();
         TelaUsuarios telUsuarios = new TelaUsuarios();
         telUsuarios.setVisible(true);
     }//GEN-LAST:event_jBUsuariosActionPerformed
@@ -121,5 +134,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBUsuarios;
     private javax.swing.JButton jBViagens;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

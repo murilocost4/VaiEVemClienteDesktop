@@ -5,6 +5,7 @@
 package view;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import view.tablemodel.ViagemTableModel;
 import modelDominio.Viagem;
 
@@ -45,9 +46,14 @@ public class TelaViagens extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTViagens = new javax.swing.JTable();
         jBAdicionar = new javax.swing.JButton();
+        jBAtualiza = new javax.swing.JButton();
+        jBExcluir = new javax.swing.JButton();
+        jBVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(57, 141, 98));
         jLabel1.setText("Viagens");
 
         jTViagens.setModel(new javax.swing.table.DefaultTableModel(
@@ -61,6 +67,7 @@ public class TelaViagens extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTViagens.setRowHeight(26);
         jTViagens.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTViagensMouseClicked(evt);
@@ -68,10 +75,43 @@ public class TelaViagens extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTViagens);
 
+        jBAdicionar.setBackground(new java.awt.Color(57, 141, 98));
+        jBAdicionar.setForeground(new java.awt.Color(255, 255, 255));
+        jBAdicionar.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/plus.png")); // NOI18N
         jBAdicionar.setText("Adicionar");
         jBAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBAdicionarActionPerformed(evt);
+            }
+        });
+
+        jBAtualiza.setBackground(new java.awt.Color(57, 141, 98));
+        jBAtualiza.setForeground(new java.awt.Color(255, 255, 255));
+        jBAtualiza.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/rotate-right.png")); // NOI18N
+        jBAtualiza.setText("Atualizar");
+        jBAtualiza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAtualizaActionPerformed(evt);
+            }
+        });
+
+        jBExcluir.setBackground(new java.awt.Color(57, 141, 98));
+        jBExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        jBExcluir.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/trash.png")); // NOI18N
+        jBExcluir.setText("Excluir");
+        jBExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExcluirActionPerformed(evt);
+            }
+        });
+
+        jBVoltar.setBackground(new java.awt.Color(57, 141, 98));
+        jBVoltar.setForeground(new java.awt.Color(255, 255, 255));
+        jBVoltar.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/arrow-left.png")); // NOI18N
+        jBVoltar.setText("Voltar");
+        jBVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBVoltarActionPerformed(evt);
             }
         });
 
@@ -80,28 +120,46 @@ public class TelaViagens extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBAdicionar)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jBAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jBVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBAtualiza))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jBAdicionar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jBAtualiza, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jBAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarActionPerformed
@@ -120,13 +178,37 @@ public class TelaViagens extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(rootPane, m);
             TelaCadViagens cadViagens = new TelaCadViagens();
             // configurando para abrir a tela somente 1 unica vez
-            cadViagens.setModal(true);
             // passando a marca para dentro da tela de cadastro
             cadViagens.setViagem(v);
             cadViagens.setVisible(true);
             atualizaTabela();
         }
     }//GEN-LAST:event_jTViagensMouseClicked
+
+    private void jBAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtualizaActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_jBAtualizaActionPerformed
+
+    private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
+        if (jTViagens.getSelectedRow() >= 0) {
+            if (JOptionPane.showConfirmDialog(this,
+                "Tem certeza de que deseja excluir?",
+                this.getTitle(),
+                JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION) {
+
+            Viagem v = viagemModel.getViagem(jTViagens.getSelectedRow());
+            if (v != null) {
+                Principal.ccont.viagemExcluir(v);
+                atualizaTabela();
+            }
+        }
+        }
+    }//GEN-LAST:event_jBExcluirActionPerformed
+
+    private void jBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVoltarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBVoltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,6 +248,9 @@ public class TelaViagens extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAdicionar;
+    private javax.swing.JButton jBAtualiza;
+    private javax.swing.JButton jBExcluir;
+    private javax.swing.JButton jBVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTViagens;
