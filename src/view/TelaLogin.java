@@ -9,8 +9,7 @@ import modelDominio.Usuario;
 import util.Criptografia;
 
 /**
- *
- * aaaaaaaaa
+ *oo
  * @author murilocost4
  */
 public class TelaLogin extends javax.swing.JFrame {
