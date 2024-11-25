@@ -24,9 +24,10 @@ public class Viagem implements Serializable{
     private String saida;
     private String retorno;
     private int status_viagem;
+    private int codCondutor;
     
     // usado por selects e updates.
-    public Viagem(int trip_id, String origem, String destino, String data, String saida, String retorno, int status_viagem) {
+    public Viagem(int trip_id, String origem, String destino, String data, String saida, String retorno, int status_viagem, int codCondutor) {
         this.trip_id = trip_id;
         this.origem = origem;
         this.destino = destino;
@@ -34,17 +35,19 @@ public class Viagem implements Serializable{
         this.saida = saida;
         this.retorno = retorno;
         this.status_viagem = status_viagem;
+        this.codCondutor = codCondutor;
     }
 
  
     // INSERTS
-    public Viagem(String origem, String destino, String data, String saida, String retorno, int status_viagem) {
+    public Viagem(String origem, String destino, String data, String saida, String retorno, int status_viagem, int codCondutor) {
         this.origem = origem;
         this.destino = destino;
         this.data = data;
         this.saida = saida;
         this.retorno = retorno;
         this.status_viagem = status_viagem;
+        this.codCondutor = codCondutor;
     }
     
     
@@ -107,6 +110,14 @@ public class Viagem implements Serializable{
 
     public void setStatus_viagem(int status_viagem) {
         this.status_viagem = status_viagem;
+    }
+    
+    public int getCodCondutor() {
+        return codCondutor;
+    }
+    
+    public void setCodCondutor(int codCondutor) {
+        this.codCondutor = codCondutor;
     }
     
     @Override

@@ -48,6 +48,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
         jTFRetorno.setText(v.getRetorno());
         jTFSaida.setText(v.getSaida());
         jCBStatus.setSelectedIndex(v.getStatus_viagem());
+        jCBMotorista.setSelectedIndex(v.getCodCondutor());
     }
     
     
@@ -230,7 +231,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o campo Retorno");
             jTFRetorno.requestFocus();
         } else {
-            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex());
+            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
             boolean ok = false;
             
             if (codigo == -1) {
