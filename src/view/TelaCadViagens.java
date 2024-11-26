@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.FlowLayout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -11,9 +12,16 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelDominio.Viagem;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import modelDominio.Condutor;
+import modelDominio.Passageiro;
+import modelDominio.StatusPassageiro;
 import view.util.ComboboxMotorista;
+import view.util.ComboboxPassageiro;
+import java.sql.Timestamp;
+import java.time.Instant;
+import javax.swing.JLabel;
 
 
 /**
@@ -21,11 +29,16 @@ import view.util.ComboboxMotorista;
  * @author murilocost4
  */
 public class TelaCadViagens extends javax.swing.JFrame {
-
+    
+    private List<StatusPassageiro> listaPassageiros;
+    Viagem v = null;
+    
     private int codigo = -1;
     /**
      * Creates new form TelaCadViagens
      */
+    
+    
     
     private void preencheComboboxMotoristas() {
         // preenchendo o comboBox dos Marcas
@@ -34,9 +47,16 @@ public class TelaCadViagens extends javax.swing.JFrame {
         ComboboxMotorista.preencheComboBoxMotorista(-1, jCBMotorista, listaCondutor);
     }
     
+    private void preencheComboboxPassageiro() {
+        ArrayList<Passageiro> listaPassageiro = new ArrayList<Passageiro>();
+        listaPassageiro = Principal.ccont.getPassageiroLista();
+        ComboboxPassageiro.preencheComboBoxPassageiro(-1, jCBPassageiro, listaPassageiro);
+    }
+    
     public TelaCadViagens() {
         initComponents();
         preencheComboboxMotoristas();
+        preencheComboboxPassageiro();
     }
     
     public void setViagem(Viagem v){
@@ -51,7 +71,63 @@ public class TelaCadViagens extends javax.swing.JFrame {
         jCBMotorista.setSelectedIndex(v.getCodCondutor());
     }
     
+    public void adicionarPassageiro(Viagem viagem) {
+    listaPassageiros = new ArrayList<>();
+
+    if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
+        // Obtém o item selecionado do combo box
+        ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
+
+        // Usa getKey() para obter o ID do passageiro
+        int passageiroId = passageiroSelecionado.getKey();
+        String passageiroNome = passageiroSelecionado.toString(); // toString retorna o nome
+
+        Timestamp horaAtualizacao = Timestamp.from(Instant.now());
+
+        Passageiro p = new Passageiro(passageiroId);
+        StatusPassageiro statusPassageiro = new StatusPassageiro(viagem, p, 1, horaAtualizacao);
+        
+        // Adiciona à lista local
+        listaPassageiros.add(statusPassageiro);
+        
+        // Aqui insere no banco de dados
+        Principal.ccont.statusPassageiroInserir(statusPassageiro);
+
+        // Atualiza a interface
+        JLabel passageiroLabel = new JLabel(passageiroNome);
+        jPPassageiros.add(passageiroLabel);
+
+        jPPassageiros.revalidate();
+        jPPassageiros.repaint();
+    }
+}
+
+
+
     
+    /*private void adicionarPassageiro(Viagem viagem) {
+        
+        jPPassageiros.setLayout(new FlowLayout());
+        
+        listaPassageiros = new ArrayList<>();
+        
+        String passageiroSelecionado = (String) jCBPassageiro.getSelectedItem();
+        if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
+            int passageiroId = Integer.parseInt(passageiroSelecionado.split(" - ")[0]);
+            String passageiroNome = passageiroSelecionado.split(" - ")[1];
+            
+            Timestamp horaAtualizacao = Timestamp.from(Instant.now());
+            
+            Passageiro p = new Passageiro(passageiroId);
+            
+            listaPassageiros.add(new StatusPassageiro(viagem,p,1, horaAtualizacao));
+            
+            JLabel passageiroLabel = new JLabel(passageiroNome);
+            jPPassageiros.add(passageiroLabel);
+            jPPassageiros.revalidate();
+            jPPassageiros.repaint();
+        }
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,6 +138,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTFOrigem = new javax.swing.JTextField();
         jTFDestino = new javax.swing.JTextField();
@@ -79,6 +156,22 @@ public class TelaCadViagens extends javax.swing.JFrame {
         jBCancelar = new javax.swing.JButton();
         jBVoltar = new javax.swing.JButton();
         jCBStatus = new javax.swing.JComboBox<>();
+        jCBPassageiro = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jBAdicionarPassageiro = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jPPassageiros = new javax.swing.JPanel();
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,48 +221,88 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
         jCBStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Não Iniciado", "Iniciado", "Finalizado" }));
 
+        jCBPassageiro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel8.setText("Passageiros");
+
+        jBAdicionarPassageiro.setText("Adicionar");
+        jBAdicionarPassageiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAdicionarPassageiroActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Status da Viagem");
+
+        javax.swing.GroupLayout jPPassageirosLayout = new javax.swing.GroupLayout(jPPassageiros);
+        jPPassageiros.setLayout(jPPassageirosLayout);
+        jPPassageirosLayout.setHorizontalGroup(
+            jPPassageirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 337, Short.MAX_VALUE)
+        );
+        jPPassageirosLayout.setVerticalGroup(
+            jPPassageirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 81, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTFRetorno)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTFOrigem)
-                                    .addComponent(jTFDestino)
-                                    .addComponent(jCBMotorista, 0, 216, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jBVoltar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                        .addComponent(jBCancelar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBSalvar)
-                        .addGap(71, 71, 71))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTFRetorno)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jBVoltar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBCancelar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBSalvar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jCBPassageiro, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jBAdicionarPassageiro, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel1)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jTFOrigem)
+                                                        .addComponent(jTFDestino)
+                                                        .addComponent(jCBMotorista, 0, 216, Short.MAX_VALUE))
+                                                    .addComponent(jLabel5))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel9)
+                                                    .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPPassageiros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(59, 59, 59))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,17 +328,27 @@ public class TelaCadViagens extends javax.swing.JFrame {
                     .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
-                .addComponent(jLabel5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBMotorista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCBPassageiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBAdicionarPassageiro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPPassageiros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBSalvar)
                     .addComponent(jBCancelar)
                     .addComponent(jBVoltar))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -231,7 +374,9 @@ public class TelaCadViagens extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o campo Retorno");
             jTFRetorno.requestFocus();
         } else {
-            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
+            
+            v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
+            v.setStatusPassageiros(listaPassageiros);
             boolean ok = false;
             
             if (codigo == -1) {
@@ -275,6 +420,10 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jBCancelarActionPerformed
 
+    private void jBAdicionarPassageiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarPassageiroActionPerformed
+        adicionarPassageiro(v);
+    }//GEN-LAST:event_jBAdicionarPassageiroActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -315,10 +464,12 @@ public class TelaCadViagens extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBAdicionarPassageiro;
     private javax.swing.JButton jBCancelar;
     private javax.swing.JButton jBSalvar;
     private javax.swing.JButton jBVoltar;
     private javax.swing.JComboBox<String> jCBMotorista;
+    private javax.swing.JComboBox<String> jCBPassageiro;
     private javax.swing.JComboBox<String> jCBStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -327,6 +478,10 @@ public class TelaCadViagens extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPPassageiros;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFDestino;
     private javax.swing.JTextField jTFOrigem;

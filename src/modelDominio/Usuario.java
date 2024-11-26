@@ -47,6 +47,11 @@ public class Usuario implements Serializable {
         this.email = email;
         this.senha = senha;
     }
+    
+    public Usuario(int codUsuario, String nomeUsuario) {
+        this.codUsuario = codUsuario;
+        this.nomeUsuario = nomeUsuario;
+    }
 
     public Usuario(int codUsuario) {
         this.codUsuario = codUsuario;
@@ -115,6 +120,10 @@ public class Usuario implements Serializable {
     public void setFone(String fone) {
         this.fone = fone;
     }
+    
+    @Override
+    public String toString() {
+        return "Usuario{" + "codUsuario=" + codUsuario + ", nomeUsuario=" + nomeUsuario + ", cpf=" + cpf + ", nascimento=" + nascimento + ", endereco=" + endereco + ", email=" + email + ", fone=" + fone +'}';
+    }
      
 }
-

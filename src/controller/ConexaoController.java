@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import modelDominio.Condutor;
+import modelDominio.Passageiro;
+import modelDominio.StatusPassageiro;
 import modelDominio.Usuario;
 import modelDominio.Viagem;
 
@@ -61,6 +63,18 @@ public class ConexaoController {
             out.writeObject("CondutorLista");
             // recebendo listagem de Viagens
             return (ArrayList<Condutor>) in.readObject(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ArrayList<Passageiro> getPassageiroLista(){
+        try {
+            // enviar o comando "ViagemLista"
+            out.writeObject("PassageiroLista");
+            // recebendo listagem de Viagens
+            return (ArrayList<Passageiro>) in.readObject(); 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -189,6 +203,23 @@ public class ConexaoController {
             in.readObject();//lendo o "ok"
             // enviando o Usuario
             out.writeObject(usr);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean statusPassageiroInserir(StatusPassageiro sp){
+        try {
+            // enviando comando
+            out.writeObject("statusPassageiroInserir");
+            in.readObject();//lendo o "ok"
+            // enviando o Usuario
+            out.writeObject(sp);
             // receber o boolean (deu certo ou não)
             // recebe resposta, converte boolean, devolve o boolean
             return( (boolean) in.readObject());

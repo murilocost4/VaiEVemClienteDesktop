@@ -7,7 +7,9 @@ package modelDominio;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -25,9 +27,10 @@ public class Viagem implements Serializable{
     private String retorno;
     private int status_viagem;
     private int codCondutor;
+    private List<StatusPassageiro> statusPassageiro;
     
     // usado por selects e updates.
-    public Viagem(int trip_id, String origem, String destino, String data, String saida, String retorno, int status_viagem, int codCondutor) {
+    public Viagem(int trip_id, String origem, String destino, String data, String saida, String retorno, int status_viagem, int codCondutor, List<StatusPassageiro> statusPassageiro) {
         this.trip_id = trip_id;
         this.origem = origem;
         this.destino = destino;
@@ -36,6 +39,7 @@ public class Viagem implements Serializable{
         this.retorno = retorno;
         this.status_viagem = status_viagem;
         this.codCondutor = codCondutor;
+        this.statusPassageiro = statusPassageiro != null ? statusPassageiro : new ArrayList<>();
     }
 
  
@@ -48,6 +52,7 @@ public class Viagem implements Serializable{
         this.retorno = retorno;
         this.status_viagem = status_viagem;
         this.codCondutor = codCondutor;
+        new ArrayList<>();
     }
     
     
@@ -116,8 +121,16 @@ public class Viagem implements Serializable{
         return codCondutor;
     }
     
-    public void setCodCondutor(int codCondutor) {
+    public void setCodCondutor(int codPassageiro) {
         this.codCondutor = codCondutor;
+    }
+    
+    public List<StatusPassageiro> getStatusPassageiros() {
+        return statusPassageiro;
+    }
+
+    public void setStatusPassageiros(List<StatusPassageiro> statusPassageiro) {
+        this.statusPassageiro = statusPassageiro;
     }
     
     @Override
