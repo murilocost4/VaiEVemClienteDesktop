@@ -98,7 +98,7 @@ public class ConexaoController {
     }
     
     // inserir Viagem
-    public boolean viagemInserir(Viagem v){
+    public int viagemInserir(Viagem v){
         try {
             // enviando comando
             out.writeObject("ViagemInserir");
@@ -107,11 +107,11 @@ public class ConexaoController {
             out.writeObject(v);
             // receber o boolean (deu certo ou não)
             // recebe resposta, converte boolean, devolve o boolean
-            return( (boolean) in.readObject());
+            return( (int) in.readObject());
             
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
     

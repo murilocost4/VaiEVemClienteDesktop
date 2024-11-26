@@ -7,10 +7,14 @@
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaCadViagens.java</file>
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaUsuarios.java</file>
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/tablemodel/UsuarioTableModel.java</file>
-            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaLogin.java</file>
-            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/tablemodel/ViagemTableModel.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/util/ComboboxPassageiro.java</file>
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaCadUsuarios.java</file>
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/controller/ConexaoController.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/modelDominio/StatusPassageiro.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaLogin.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/tablemodel/ViagemTableModel.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/util/ComboboxMotorista.java</file>
+            <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/modelDominio/Viagem.java</file>
             <file>file:/home/murilocost4/NetBeansProjects/VaiEVemCliente/src/view/TelaPrincipal.java</file>
         </group>
     </open-files>
