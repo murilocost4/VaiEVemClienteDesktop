@@ -22,7 +22,9 @@ import view.util.ComboboxMotorista;
 import view.util.ComboboxPassageiro;
 import java.sql.Timestamp;
 import java.time.Instant;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 
 /**
@@ -30,8 +32,7 @@ import javax.swing.JLabel;
  * @author murilocost4
  */
 public class TelaCadViagens extends javax.swing.JFrame {
-    
-    
+    private Viagem v;
     private int codigo = -1;
     ArrayList<Passageiro> listaPassageiros = new ArrayList<>();
     /**
@@ -53,35 +54,47 @@ public class TelaCadViagens extends javax.swing.JFrame {
         ComboboxPassageiro.preencheComboBoxPassageiro(-1, jCBPassageiro, listaPassageiro);
     }
     
-    private void preencheLabelPassageiros() {
-        ArrayList<StatusPassageiro> spLista = new ArrayList<StatusPassageiro>();
-    }
+    
     
     public TelaCadViagens() {
         initComponents();
         preencheComboboxMotoristas();
         preencheComboboxPassageiro();
+        
     }
     
     public void setViagem(Viagem v){
-        // método para carregar a marca na tela
-        codigo = v.getTrip_id(); // salvando o código para usar depois no salvar
-        jTFOrigem.setText(v.getOrigem());
-        jTFDestino.setText(v.getDestino());
-        jTFData.setText(v.getData());
-        jTFRetorno.setText(v.getRetorno());
-        jTFSaida.setText(v.getSaida());
-        jCBStatus.setSelectedIndex(v.getStatus_viagem());
-        jCBMotorista.setSelectedIndex(v.getCodCondutor());
-        
-        ArrayList<StatusPassageiro> spLista = new ArrayList<>();
-        spLista = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
-        
-        for (StatusPassageiro sp : spLista) {
-            JLabel label = new JLabel(sp.getPassageiro().getNomeUsuario());
-            label.setFont(new Font("Arial", Font.PLAIN, 16));
-            jPPassageiros.add(label);
+        if (this.v == null) {
+            codigo = v.getTrip_id(); // salvando o código para usar depois no salvar
+            jTFOrigem.setText(v.getOrigem());
+            jTFDestino.setText(v.getDestino());
+            jTFData.setText(v.getData());
+            jTFRetorno.setText(v.getRetorno());
+            jTFSaida.setText(v.getSaida());
+            jCBStatus.setSelectedIndex(v.getStatus_viagem());
+            jCBMotorista.setSelectedIndex(v.getCodCondutor());
+
+            ArrayList<StatusPassageiro> spLista = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
+
+            jPPassageiros.removeAll();
+
+            // Configura o layout do painel como BoxLayout para alinhar os labels verticalmente
+            jPPassageiros.setLayout(new BoxLayout(jPPassageiros, BoxLayout.Y_AXIS));
+
+            // Adiciona um JLabel para cada passageiro na lista
+            for (StatusPassageiro sp : spLista) {
+                JLabel label = new JLabel(sp.getPassageiro().getNomeUsuario());
+                label.setFont(new Font("Arial", Font.PLAIN, 16)); // Define o estilo do texto
+                jPPassageiros.add(label); // Adiciona o JLabel ao painel
+            }
+            
+            jPPassageiros.revalidate(); // Atualiza o layout do painel
+            jPPassageiros.repaint(); 
+            this.v = v;
+        } else {
+            this.v = v;
         }
+        
     }
     
     
@@ -359,7 +372,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
             jTFRetorno.requestFocus();
         } else {
             
-            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
+            v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
             
             
             
@@ -384,6 +397,14 @@ public class TelaCadViagens extends javax.swing.JFrame {
                 
             } else {
                 v.setTrip_id(codigo);
+                ArrayList<StatusPassageiro> spLista = new ArrayList<>();
+                    for (Passageiro p : listaPassageiros) {
+                        Timestamp horaAtualizacao = Timestamp.from(Instant.now());
+                        StatusPassageiro statusPassageiro = new StatusPassageiro(codigo, p, 1, horaAtualizacao);
+                        Principal.ccont.statusPassageiroInserir(statusPassageiro);
+                        spLista.add(statusPassageiro);
+                    }
+                   v.setStatusPassageiros(spLista);
                 ok = Principal.ccont.viagemAlterar(v);
                 
                 
@@ -424,9 +445,33 @@ public class TelaCadViagens extends javax.swing.JFrame {
     }//GEN-LAST:event_jBCancelarActionPerformed
 
     private void jBAdicionarPassageiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarPassageiroActionPerformed
-        
+        jBAdicionarPassageiro.addActionListener(e -> {
+            
+                Passageiro passageiroSelecionado = (Passageiro) jCBPassageiro.getSelectedItem();
+                if (passageiroSelecionado != null) {
+                    ArrayList<StatusPassageiro> spLista = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
+                    
+                    boolean jaAdicionado = spLista.stream()
+                            .anyMatch(sp -> sp.getPassageiro().getCodUsuario() == passageiroSelecionado.getCodUsuario());
 
-        if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
+                    if (!jaAdicionado) {
+                        StatusPassageiro novoStatus = new StatusPassageiro(v.getTrip_id(),passageiroSelecionado,1,Timestamp.from(Instant.now()));
+                        spLista.add(novoStatus);
+
+                        JLabel label = new JLabel(passageiroSelecionado.getNomeUsuario());
+                        jPPassageiros.add(label);
+                        jPPassageiros.revalidate();
+                        jPPassageiros.repaint();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Passageiro já está na lista!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Selecione um passageiro!", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            
+        });
+
+        /*if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
         // Obtém o item selecionado do combo box
         ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
 
@@ -447,7 +492,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
             label.setFont(new Font("Arial", Font.PLAIN, 16));
             jPPassageiros.add(label);
         
-    }
+    }*/
     }//GEN-LAST:event_jBAdicionarPassageiroActionPerformed
 
     /**
