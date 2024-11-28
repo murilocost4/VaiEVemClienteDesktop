@@ -229,6 +229,23 @@ public class ConexaoController {
             return false;
         }
     }
+    
+    public boolean excluirPassageiros(Viagem v){
+        try {
+            // enviando comando
+            out.writeObject("excluirPassageiros");
+            in.readObject();//lendo o "ok"
+            // enviando a Viagem
+            out.writeObject(v);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
      //=========================== FIM ==================
      public void fim(){

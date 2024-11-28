@@ -199,7 +199,13 @@ public class TelaViagens extends javax.swing.JFrame {
 
             Viagem v = viagemModel.getViagem(jTViagens.getSelectedRow());
             if (v != null) {
-                Principal.ccont.viagemExcluir(v);
+                boolean ok = Principal.ccont.excluirPassageiros(v);
+                if (ok) {
+                    Principal.ccont.viagemExcluir(v);
+                } else {
+                    System.out.println("Erro ao excluir passageiros");
+                }
+                
                 atualizaTabela();
             }
         }

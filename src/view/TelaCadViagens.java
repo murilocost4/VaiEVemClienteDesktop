@@ -32,9 +32,8 @@ import javax.swing.JScrollPane;
  * @author murilocost4
  */
 public class TelaCadViagens extends javax.swing.JFrame {
-    private Viagem v;
-    private int codigo = -1;
     ArrayList<Passageiro> listaPassageiros = new ArrayList<>();
+    private int codigo = -1;
     /**
      * Creates new form TelaCadViagens
      */
@@ -64,7 +63,6 @@ public class TelaCadViagens extends javax.swing.JFrame {
     }
     
     public void setViagem(Viagem v){
-        if (this.v == null) {
             codigo = v.getTrip_id(); // salvando o código para usar depois no salvar
             jTFOrigem.setText(v.getOrigem());
             jTFDestino.setText(v.getDestino());
@@ -90,11 +88,6 @@ public class TelaCadViagens extends javax.swing.JFrame {
             
             jPPassageiros.revalidate(); // Atualiza o layout do painel
             jPPassageiros.repaint(); 
-            this.v = v;
-        } else {
-            this.v = v;
-        }
-        
     }
     
     
@@ -372,7 +365,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
             jTFRetorno.requestFocus();
         } else {
             
-            v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
+            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
             
             
             
@@ -445,31 +438,28 @@ public class TelaCadViagens extends javax.swing.JFrame {
     }//GEN-LAST:event_jBCancelarActionPerformed
 
     private void jBAdicionarPassageiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarPassageiroActionPerformed
-        jBAdicionarPassageiro.addActionListener(e -> {
-            
-                Passageiro passageiroSelecionado = (Passageiro) jCBPassageiro.getSelectedItem();
-                if (passageiroSelecionado != null) {
-                    ArrayList<StatusPassageiro> spLista = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
-                    
-                    boolean jaAdicionado = spLista.stream()
-                            .anyMatch(sp -> sp.getPassageiro().getCodUsuario() == passageiroSelecionado.getCodUsuario());
+        if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
+        // Obtém o item selecionado do combo box
+        ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
 
-                    if (!jaAdicionado) {
-                        StatusPassageiro novoStatus = new StatusPassageiro(v.getTrip_id(),passageiroSelecionado,1,Timestamp.from(Instant.now()));
-                        spLista.add(novoStatus);
+        // Usa getKey() para obter o ID do passageiro
+        int passageiroId = passageiroSelecionado.getKey();
+        String passageiroNome = passageiroSelecionado.toString(); // toString retorna o nome
 
-                        JLabel label = new JLabel(passageiroSelecionado.getNomeUsuario());
-                        jPPassageiros.add(label);
-                        jPPassageiros.revalidate();
-                        jPPassageiros.repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Passageiro já está na lista!", "Aviso", JOptionPane.WARNING_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Selecione um passageiro!", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            
-        });
+
+        Passageiro p = new Passageiro(passageiroId, passageiroNome);
+        
+        // Adiciona à lista local
+        listaPassageiros.add(p);
+        
+        
+        // Atualiza a interface
+        
+            JLabel label = new JLabel(p.getNomeUsuario());
+            label.setFont(new Font("Arial", Font.PLAIN, 16));
+            jPPassageiros.add(label);
+        
+    }
 
         /*if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
         // Obtém o item selecionado do combo box
