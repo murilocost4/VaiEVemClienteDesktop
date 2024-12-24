@@ -6,13 +6,14 @@ package view;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelDominio.Viagem;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 import modelDominio.Condutor;
@@ -21,10 +22,21 @@ import modelDominio.StatusPassageiro;
 import view.util.ComboboxMotorista;
 import view.util.ComboboxPassageiro;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.time.Instant;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
+import modelDominio.Usuario;
+import view.tablemodel.PassageiroTableModel;
+import view.tablemodel.UsuarioTableModel;
 
 
 /**
@@ -33,10 +45,17 @@ import javax.swing.JScrollPane;
  */
 public class TelaCadViagens extends javax.swing.JFrame {
     ArrayList<Passageiro> listaPassageiros = new ArrayList<>();
+    ArrayList<StatusPassageiro> spLista = new ArrayList<>();
     private int codigo = -1;
+    private PassageiroTableModel passageiroModel;
     /**
      * Creates new form TelaCadViagens
      */
+    
+    private void atualizaTabela() {
+        passageiroModel = new PassageiroTableModel(listaPassageiros);
+        jTPassageiros.setModel(passageiroModel);
+    }
     
     
     
@@ -58,8 +77,26 @@ public class TelaCadViagens extends javax.swing.JFrame {
     public TelaCadViagens() {
         initComponents();
         preencheComboboxMotoristas();
-        preencheComboboxPassageiro();
-        
+        preencheComboboxPassageiro();   
+        this.listaPassageiros = listaPassageiros;
+        this.spLista = spLista;
+        atualizaTabela();
+        MaskFormatter dateFormatter;
+        MaskFormatter horaFormatter;
+        try { 
+            dateFormatter = new MaskFormatter("##/##/####");
+            horaFormatter = new MaskFormatter("##:##");
+            dateFormatter.setPlaceholderCharacter('_');
+            horaFormatter.setPlaceholderCharacter('_');
+            jTFData.setColumns(10);
+            jTFData.setFormatterFactory(new DefaultFormatterFactory (dateFormatter));
+            jTFSaida.setColumns(5);
+            jTFSaida.setFormatterFactory(new DefaultFormatterFactory (horaFormatter));
+            jTFRetorno.setColumns(5);
+            jTFRetorno.setFormatterFactory(new DefaultFormatterFactory (horaFormatter));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
     
     public void setViagem(Viagem v){
@@ -67,27 +104,16 @@ public class TelaCadViagens extends javax.swing.JFrame {
             jTFOrigem.setText(v.getOrigem());
             jTFDestino.setText(v.getDestino());
             jTFData.setText(v.getData());
-            jTFRetorno.setText(v.getRetorno());
-            jTFSaida.setText(v.getSaida());
+            jTFRetorno.setText(v.getRetorno().toString());
+            jTFSaida.setText(v.getSaida().toString());
             jCBStatus.setSelectedIndex(v.getStatus_viagem());
             jCBMotorista.setSelectedIndex(v.getCodCondutor());
 
-            ArrayList<StatusPassageiro> spLista = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
-
-            jPPassageiros.removeAll();
-
-            // Configura o layout do painel como BoxLayout para alinhar os labels verticalmente
-            jPPassageiros.setLayout(new BoxLayout(jPPassageiros, BoxLayout.Y_AXIS));
-
-            // Adiciona um JLabel para cada passageiro na lista
-            for (StatusPassageiro sp : spLista) {
-                JLabel label = new JLabel(sp.getPassageiro().getNomeUsuario());
-                label.setFont(new Font("Arial", Font.PLAIN, 16)); // Define o estilo do texto
-                jPPassageiros.add(label); // Adiciona o JLabel ao painel
+            ArrayList<StatusPassageiro> listaSP = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
+            for (StatusPassageiro sp : listaSP) {
+                listaPassageiros.add(sp.getPassageiro());
             }
-            
-            jPPassageiros.revalidate(); // Atualiza o layout do painel
-            jPPassageiros.repaint(); 
+            atualizaTabela();
     }
     
     
@@ -132,9 +158,6 @@ public class TelaCadViagens extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTFOrigem = new javax.swing.JTextField();
         jTFDestino = new javax.swing.JTextField();
-        jTFData = new javax.swing.JTextField();
-        jTFSaida = new javax.swing.JTextField();
-        jTFRetorno = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -150,7 +173,12 @@ public class TelaCadViagens extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jBAdicionarPassageiro = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jPPassageiros = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTPassageiros = new javax.swing.JTable();
+        jBExcluirP = new javax.swing.JButton();
+        jTFSaida = new javax.swing.JFormattedTextField();
+        jTFRetorno = new javax.swing.JFormattedTextField();
+        jTFData = new javax.swing.JFormattedTextField();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -165,9 +193,12 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Viagens");
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(5, 150, 105));
+        jLabel1.setText("Viagem");
 
         jTFOrigem.setToolTipText("");
+        jTFOrigem.setSelectionColor(new java.awt.Color(5, 150, 105));
 
         jLabel2.setText("Origem");
 
@@ -181,6 +212,8 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
         jLabel7.setText("Retorno");
 
+        jBSalvar.setBackground(new java.awt.Color(5, 150, 105));
+        jBSalvar.setForeground(new java.awt.Color(255, 255, 255));
         jBSalvar.setText("Salvar");
         jBSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,6 +228,8 @@ public class TelaCadViagens extends javax.swing.JFrame {
             }
         });
 
+        jBCancelar.setBackground(new java.awt.Color(5, 150, 105));
+        jBCancelar.setForeground(new java.awt.Color(255, 255, 255));
         jBCancelar.setText("Cancelar");
         jBCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,6 +237,9 @@ public class TelaCadViagens extends javax.swing.JFrame {
             }
         });
 
+        jBVoltar.setBackground(new java.awt.Color(5, 150, 105));
+        jBVoltar.setForeground(new java.awt.Color(255, 255, 255));
+        jBVoltar.setIcon(new javax.swing.ImageIcon("/home/murilocost4/Downloads/arrow-left.png")); // NOI18N
         jBVoltar.setText("Voltar");
         jBVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,6 +253,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
         jLabel8.setText("Passageiros");
 
+        jBAdicionarPassageiro.setForeground(new java.awt.Color(5, 150, 105));
         jBAdicionarPassageiro.setText("Adicionar");
         jBAdicionarPassageiro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,16 +263,26 @@ public class TelaCadViagens extends javax.swing.JFrame {
 
         jLabel9.setText("Status da Viagem");
 
-        javax.swing.GroupLayout jPPassageirosLayout = new javax.swing.GroupLayout(jPPassageiros);
-        jPPassageiros.setLayout(jPPassageirosLayout);
-        jPPassageirosLayout.setHorizontalGroup(
-            jPPassageirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 337, Short.MAX_VALUE)
-        );
-        jPPassageirosLayout.setVerticalGroup(
-            jPPassageirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 81, Short.MAX_VALUE)
-        );
+        jTPassageiros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTPassageiros);
+
+        jBExcluirP.setForeground(new java.awt.Color(5, 150, 105));
+        jBExcluirP.setText("Excluir");
+        jBExcluirP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExcluirPActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -243,102 +292,109 @@ public class TelaCadViagens extends javax.swing.JFrame {
                 .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jCBStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTFDestino, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCBMotorista, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(158, 158, 158))
+                            .addComponent(jLabel5))
+                        .addGap(313, 313, 313))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
-                                    .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTFRetorno)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jBVoltar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBCancelar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBSalvar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jCBPassageiro, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jBAdicionarPassageiro, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel1)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jTFOrigem)
-                                                        .addComponent(jTFDestino)
-                                                        .addComponent(jCBMotorista, 0, 216, Short.MAX_VALUE))
-                                                    .addComponent(jLabel5))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel9)
-                                                    .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPPassageiros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(59, 59, 59))))
+                                    .addComponent(jTFRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTFOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
+                        .addGap(86, 86, 86)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jCBPassageiro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jBExcluirP)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jBAdicionarPassageiro))
+                                .addComponent(jLabel8))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(67, 67, 67))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTFOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jBVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBExcluirP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCBPassageiro)
+                            .addComponent(jBAdicionarPassageiro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(3, 3, 3)
-                .addComponent(jTFDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFRetorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCBMotorista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCBPassageiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBAdicionarPassageiro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPPassageiros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBSalvar)
-                    .addComponent(jBCancelar)
-                    .addComponent(jBVoltar))
-                .addGap(21, 21, 21))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTFSaida, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                            .addComponent(jTFRetorno)
+                            .addComponent(jTFData))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addGap(24, 24, 24)
+                        .addComponent(jCBMotorista, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(57, 57, 57))
         );
 
         pack();
@@ -365,18 +421,20 @@ public class TelaCadViagens extends javax.swing.JFrame {
             jTFRetorno.requestFocus();
         } else {
             
+            
             Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
             
             
             
             boolean ok = false;
             
+            // Criação da viagem
+            
+                
             if (codigo == -1) {
                 int idGerado = Principal.ccont.viagemInserir(v);
-                System.out.println("Id Gerado:"+idGerado);
                 if (idGerado != 0) {
                     ok = true;
-                    ArrayList<StatusPassageiro> spLista = new ArrayList<>();
                     for (Passageiro p : listaPassageiros) {
                         Timestamp horaAtualizacao = Timestamp.from(Instant.now());
                         StatusPassageiro statusPassageiro = new StatusPassageiro(idGerado, p, 1, horaAtualizacao);
@@ -390,7 +448,6 @@ public class TelaCadViagens extends javax.swing.JFrame {
                 
             } else {
                 v.setTrip_id(codigo);
-                ArrayList<StatusPassageiro> spLista = new ArrayList<>();
                     for (Passageiro p : listaPassageiros) {
                         Timestamp horaAtualizacao = Timestamp.from(Instant.now());
                         StatusPassageiro statusPassageiro = new StatusPassageiro(codigo, p, 1, horaAtualizacao);
@@ -421,7 +478,8 @@ public class TelaCadViagens extends javax.swing.JFrame {
                 jTFRetorno.setText("");
             }
             this.dispose();
-        }
+            
+    }
         
     }//GEN-LAST:event_jBSalvarActionPerformed
 
@@ -438,29 +496,27 @@ public class TelaCadViagens extends javax.swing.JFrame {
     }//GEN-LAST:event_jBCancelarActionPerformed
 
     private void jBAdicionarPassageiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarPassageiroActionPerformed
+        
         if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
-        // Obtém o item selecionado do combo box
-        ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
-
-        // Usa getKey() para obter o ID do passageiro
-        int passageiroId = passageiroSelecionado.getKey();
-        String passageiroNome = passageiroSelecionado.toString(); // toString retorna o nome
-
-
-        Passageiro p = new Passageiro(passageiroId, passageiroNome);
+            ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
+            int passageiroId = passageiroSelecionado.getKey();
+            String passageiroNome = passageiroSelecionado.toString();
+            Passageiro p = new Passageiro(passageiroId, passageiroNome);
+            
+            if (listaPassageiros.contains(p)) {
+                JOptionPane.showMessageDialog(rootPane, "Erro: Passageiro já inserido nesta viagem");
+                atualizaTabela();
+                
+            } else {
+                listaPassageiros.add(p);
+                atualizaTabela();
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Erro: Selecione o Passageiro");
+        }
         
-        // Adiciona à lista local
-        listaPassageiros.add(p);
         
-        
-        // Atualiza a interface
-        
-            JLabel label = new JLabel(p.getNomeUsuario());
-            label.setFont(new Font("Arial", Font.PLAIN, 16));
-            jPPassageiros.add(label);
-        
-    }
-
         /*if (jCBPassageiro != null && jCBPassageiro.getSelectedItem() != null) {
         // Obtém o item selecionado do combo box
         ComboboxPassageiro passageiroSelecionado = (ComboboxPassageiro) jCBPassageiro.getSelectedItem();
@@ -474,16 +530,28 @@ public class TelaCadViagens extends javax.swing.JFrame {
         
         // Adiciona à lista local
         listaPassageiros.add(p);
-        
-        
-        // Atualiza a interface
-        
-            JLabel label = new JLabel(p.getNomeUsuario());
-            label.setFont(new Font("Arial", Font.PLAIN, 16));
-            jPPassageiros.add(label);
-        
-    }*/
+        }*/
     }//GEN-LAST:event_jBAdicionarPassageiroActionPerformed
+
+    private void jBExcluirPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirPActionPerformed
+        if (jTPassageiros.getSelectedRow() >= 0) {
+            if (JOptionPane.showConfirmDialog(this,
+                "Tem certeza de que deseja excluir?",
+                this.getTitle(),
+                JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION) {
+
+            Passageiro p = passageiroModel.getPassageiro(jTPassageiros.getSelectedRow());
+            if (p != null) {
+                listaPassageiros.remove(p);
+                Timestamp horaAtualizacao = Timestamp.from(Instant.now());
+                StatusPassageiro sp = new StatusPassageiro(codigo, p, 1, horaAtualizacao);
+                Principal.ccont.excluirStatusPassageiro(sp);
+                atualizaTabela();
+            }
+        }
+        }
+    }//GEN-LAST:event_jBExcluirPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -527,6 +595,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAdicionarPassageiro;
     private javax.swing.JButton jBCancelar;
+    private javax.swing.JButton jBExcluirP;
     private javax.swing.JButton jBSalvar;
     private javax.swing.JButton jBVoltar;
     private javax.swing.JComboBox<String> jCBMotorista;
@@ -541,12 +610,13 @@ public class TelaCadViagens extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPPassageiros;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTFData;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JFormattedTextField jTFData;
     private javax.swing.JTextField jTFDestino;
     private javax.swing.JTextField jTFOrigem;
-    private javax.swing.JTextField jTFRetorno;
-    private javax.swing.JTextField jTFSaida;
+    private javax.swing.JFormattedTextField jTFRetorno;
+    private javax.swing.JFormattedTextField jTFSaida;
+    private javax.swing.JTable jTPassageiros;
     // End of variables declaration//GEN-END:variables
 }
