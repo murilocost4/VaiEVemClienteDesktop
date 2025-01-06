@@ -14,6 +14,8 @@ import modelDominio.Admin;
 import modelDominio.Condutor;
 import modelDominio.Passageiro;
 import modelDominio.Usuario;
+import util.Criptografia;
+
 
 /**
  *
@@ -245,11 +247,12 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTFNascimento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
 
@@ -296,6 +299,7 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
     
         // Criação do usuário com base no tipo
         Usuario usr;
+        String senhaCriptografada = Criptografia.criptografarSenha(jPFSenha.getText());
         String nome = jTFNome.getText().trim();
         String cpf = jTFCpf.getText().trim();
         String nascimento = jTFNascimento.getText();
@@ -304,9 +308,9 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
         String email = jTFEmail.getText().trim();
         String fone = jTFFone.getText().trim();
         switch (jCBTipo.getSelectedIndex()) {
-            case 1 -> usr = new Admin(nome, cpf, nascimento, endereco, senha, email, fone);
-            case 2 -> usr = new Condutor(nome, cpf, nascimento, endereco, senha, email, fone);
-            case 3 -> usr = new Passageiro(nome, cpf, nascimento, endereco, senha, email, fone);
+            case 1 -> usr = new Admin(nome, cpf, nascimento, endereco, senhaCriptografada, email, fone);
+            case 2 -> usr = new Condutor(nome, cpf, nascimento, endereco, senhaCriptografada, email, fone);
+            case 3 -> usr = new Passageiro(nome, cpf, nascimento, endereco, senhaCriptografada, email, fone);
             default -> {
                 JOptionPane.showMessageDialog(this, "Tipo de usuário inválido");
                 return;

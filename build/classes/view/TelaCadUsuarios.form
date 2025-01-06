@@ -151,11 +151,13 @@
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" max="-2" attributes="0">
-                  <Component id="jBSalvar" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jBCancelar" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jTFNascimento" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jTFCpf" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jBSalvar" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jBCancelar" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jTFCpf" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="62" max="32767" attributes="0"/>
           </Group>
