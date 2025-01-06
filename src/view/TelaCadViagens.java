@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -44,6 +45,7 @@ import view.tablemodel.UsuarioTableModel;
  * @author murilocost4
  */
 public class TelaCadViagens extends javax.swing.JFrame {
+    
     ArrayList<Passageiro> listaPassageiros = new ArrayList<>();
     ArrayList<StatusPassageiro> spLista = new ArrayList<>();
     private int codigo = -1;
@@ -60,7 +62,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
     
     
     private void preencheComboboxMotoristas() {
-        // preenchendo o comboBox dos Marcas
+        // preenchendo o comboBox dos Motoristas
         ArrayList<Condutor> listaCondutor = new ArrayList<Condutor>();
         listaCondutor = Principal.ccont.getCondutorLista();
         ComboboxMotorista.preencheComboBoxMotorista(-1, jCBMotorista, listaCondutor);
@@ -75,6 +77,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
     
     
     public TelaCadViagens() {
+        
         initComponents();
         preencheComboboxMotoristas();
         preencheComboboxPassageiro();   
@@ -107,7 +110,19 @@ public class TelaCadViagens extends javax.swing.JFrame {
             jTFRetorno.setText(v.getRetorno().toString());
             jTFSaida.setText(v.getSaida().toString());
             jCBStatus.setSelectedIndex(v.getStatus_viagem());
-            jCBMotorista.setSelectedIndex(v.getCodCondutor());
+            
+            int codCondutor = v.getCodCondutor(); // O ID do motorista que você quer selecionar
+
+            for (int i = 0; i < jCBMotorista.getItemCount(); i++) {
+                jCBMotorista.setSelectedIndex(i); // Temporariamente seleciona o item
+                ComboboxMotorista motorista = (ComboboxMotorista) jCBMotorista.getSelectedItem(); // Obtém o item selecionado
+                if (motorista.getKey() == codCondutor) { // Compara o código
+                    break; // Sai do loop, pois o item foi encontrado
+                }
+            }
+
+
+
 
             ArrayList<StatusPassageiro> listaSP = (ArrayList<StatusPassageiro>) v.getStatusPassageiros();
             for (StatusPassageiro sp : listaSP) {
@@ -420,9 +435,10 @@ public class TelaCadViagens extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o campo Retorno");
             jTFRetorno.requestFocus();
         } else {
-            
-            
-            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), jCBMotorista.getSelectedIndex());
+            ComboboxMotorista motorista = (ComboboxMotorista) jCBMotorista.getSelectedItem();
+            int codCondutor = motorista.getKey();
+            System.out.println("Condutor: "+codCondutor);
+            Viagem v = new Viagem(jTFOrigem.getText(), jTFDestino.getText(), jTFData.getText(), jTFSaida.getText(), jTFRetorno.getText(), jCBStatus.getSelectedIndex(), codCondutor);
             
             
             

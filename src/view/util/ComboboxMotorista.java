@@ -18,7 +18,7 @@ import modelDominio.Condutor;
 //Referência: http://www.guj.com.br/t/jcombobox-tem-id/50938/10
 
 public class ComboboxMotorista {
- 
+    
     //Atributos privados do ComboBox
     private String value; // String que aparece para o usuário
     private int key;      // Código da String (Chave primaria da tabela Marca)
