@@ -299,12 +299,12 @@ public class TelaCadUsuarios extends javax.swing.JFrame {
     
         // Criação do usuário com base no tipo
         Usuario usr;
-        String senhaCriptografada = Criptografia.criptografarSenha(jPFSenha.getText());
+        String senha = jPFSenha.getPassword().toString();
+        String senhaCriptografada = Criptografia.criptografarSenha(senha);
         String nome = jTFNome.getText().trim();
         String cpf = jTFCpf.getText().trim();
         String nascimento = jTFNascimento.getText();
         String endereco = jTFEndereco.getText().trim();
-        String senha = new String(jPFSenha.getPassword()).trim();
         String email = jTFEmail.getText().trim();
         String fone = jTFFone.getText().trim();
         switch (jCBTipo.getSelectedIndex()) {
