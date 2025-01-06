@@ -144,10 +144,11 @@ public class TelaLogin extends javax.swing.JFrame {
         String senha = new String(jTFSenha.getPassword());
         
         // criptografar aqui
+        String senhaCriptografada = Criptografia.criptografarSenha(senha);
+        System.out.println(senhaCriptografada);
         
-        Usuario user = new Usuario(email, senha); // Criptografia ocorre dentro do construtor
+        Usuario user = new Usuario(email, senhaCriptografada); // Criptografia ocorre dentro do construtor
         
-        System.out.println(user);
         
             Usuario resultado = Principal.ccont.efetuarLogin(user);
 
