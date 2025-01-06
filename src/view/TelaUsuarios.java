@@ -189,6 +189,7 @@ public class TelaUsuarios extends javax.swing.JFrame {
 
             Usuario usr = usuarioModel.getUsuario(jTUsuarios.getSelectedRow());
             if (usr != null) {
+                Principal.ccont.excluirPassageiroUsuario(usr);
                 Principal.ccont.usuarioExcluir(usr);
                 atualizaTabela();
             }
