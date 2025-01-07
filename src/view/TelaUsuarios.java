@@ -6,6 +6,7 @@ package view;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import modelDominio.Condutor;
 import modelDominio.Usuario;
 import view.tablemodel.UsuarioTableModel;
 
@@ -181,20 +182,65 @@ public class TelaUsuarios extends javax.swing.JFrame {
 
     private void jBExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluir1ActionPerformed
         if (jTUsuarios.getSelectedRow() >= 0) {
-            if (JOptionPane.showConfirmDialog(this,
-                "Tem certeza de que deseja excluir?",
-                this.getTitle(),
-                JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION) {
+        int resposta = JOptionPane.showConfirmDialog(
+            this,
+            "Tem certeza de que deseja excluir?",
+            this.getTitle(),
+            JOptionPane.YES_NO_OPTION
+        );
 
-            Usuario usr = usuarioModel.getUsuario(jTUsuarios.getSelectedRow());
-            if (usr != null) {
-                Principal.ccont.excluirPassageiroUsuario(usr);
-                Principal.ccont.usuarioExcluir(usr);
-                atualizaTabela();
+        if (resposta == JOptionPane.YES_OPTION) {
+            try {
+                // Obter o usuário selecionado
+                Usuario usr = usuarioModel.getUsuario(jTUsuarios.getSelectedRow());
+
+                if (usr != null) {
+                    // Excluir dependências específicas do usuário
+                    if (usr instanceof Condutor) {
+                        boolean condutorExcluido = Principal.ccont.excluirCondutorUsuario(usr);
+                        if (!condutorExcluido) {
+                            JOptionPane.showMessageDialog(
+                                this,
+                                "Não foi possível excluir o condutor, pois ele está vinculado a viagens.",
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE
+                            );
+                            return;
+                        }
+                    }
+
+                    // Excluir o usuário geral
+                    Principal.ccont.excluirPassageiroUsuario(usr);
+                    Principal.ccont.usuarioExcluir(usr);
+
+                    // Atualizar a tabela após exclusão
+                    atualizaTabela();
+
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Usuário excluído com sucesso.",
+                        "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Ocorreu um erro ao tentar excluir o usuário: " + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                e.printStackTrace();
             }
         }
-        }
+    } else {
+        JOptionPane.showMessageDialog(
+            this,
+            "Nenhum usuário selecionado.",
+            "Aviso",
+            JOptionPane.WARNING_MESSAGE
+        );
+    }
     }//GEN-LAST:event_jBExcluir1ActionPerformed
 
     private void jBAdicionar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionar1ActionPerformed

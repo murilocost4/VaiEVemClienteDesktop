@@ -264,6 +264,23 @@ public class ConexaoController {
         }
     }
     
+    public boolean excluirCondutorUsuario(Usuario usr){
+        try {
+            // enviando comando
+            out.writeObject("excluirDoCondutor");
+            in.readObject();//lendo o "ok"
+            // enviando a Viagem
+            out.writeObject(usr);
+            // receber o boolean (deu certo ou não)
+            // recebe resposta, converte boolean, devolve o boolean
+            return( (boolean) in.readObject());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public boolean excluirStatusPassageiro(StatusPassageiro sp){
         try {
             // enviando comando
