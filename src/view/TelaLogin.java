@@ -145,11 +145,11 @@ public class TelaLogin extends javax.swing.JFrame {
         
         // criptografar aqui
         String senhaCriptografada = Criptografia.criptografarSenha(senha);
-        System.out.println(senhaCriptografada);
+        System.out.println("Senha :"+senha);
+        System.out.println("Cripto: "+senhaCriptografada);
         
         Usuario user = new Usuario(email, senhaCriptografada); // Criptografia ocorre dentro do construtor
-        
-        
+     
             Usuario resultado = Principal.ccont.efetuarLogin(user);
 
             if (resultado != null) {

@@ -4,6 +4,7 @@
  */
 package util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -16,7 +17,7 @@ public class Criptografia {
     public static String criptografarSenha(String senha) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            byte[] hash = md.digest(senha.getBytes());
+            byte[] hash = md.digest(senha.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
 
             for (byte b : hash) {
