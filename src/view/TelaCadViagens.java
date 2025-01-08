@@ -453,7 +453,7 @@ public class TelaCadViagens extends javax.swing.JFrame {
                     ok = true;
                     for (Passageiro p : listaPassageiros) {
                         Timestamp horaAtualizacao = Timestamp.from(Instant.now());
-                        StatusPassageiro statusPassageiro = new StatusPassageiro(idGerado, p, 1, horaAtualizacao);
+                        StatusPassageiro statusPassageiro = new StatusPassageiro(idGerado, p, 0, horaAtualizacao);
                         Principal.ccont.statusPassageiroInserir(statusPassageiro);
                         spLista.add(statusPassageiro);
                     }
